@@ -1,0 +1,419 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>CARIVIX Competitive Matrix</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky-header heatmap table, controls above, tabbed secondary tables below */
+:root{
+  --bg:#f3f5f6; --surface:#ffffff; --fg:#14212b; --muted:#5b6b77; --line:#d9e0e4;
+  --accent:#0b7a75; --on-accent:#ffffff; --warn:#b4540a; --warn-bg:#fbeee1; --ok:#0b7a75;
+  --font:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --g1:#6d4fd1;--g2:#c2570c;--g3:#b0289a;--g4:#8a6a00;--g5:#2f8a3a;--g6:#c0392b;--g7:#1f78b4;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1519; --surface:#151e24; --fg:#e4ecf0; --muted:#8fa1ad; --line:#26333b;
+  --accent:#4fc7bf; --on-accent:#06201e; --warn:#f0a35e; --warn-bg:#2a1d10; --ok:#4fc7bf; --g1:#a08cf2;--g2:#f0954f;--g3:#e27bd0;--g4:#d6b84a;--g5:#6fcf7a;--g6:#f07f72;--g7:#62b4e8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1519; --surface:#151e24; --fg:#e4ecf0; --muted:#8fa1ad; --line:#26333b;
+  --accent:#4fc7bf; --on-accent:#06201e; --warn:#f0a35e; --warn-bg:#2a1d10; --ok:#4fc7bf; --g1:#a08cf2;--g2:#f0954f;--g3:#e27bd0;--g4:#d6b84a;--g5:#6fcf7a;--g6:#f07f72;--g7:#62b4e8; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.5;
+  padding-inline:16px;padding-block:24px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header h1{font-size:24px;font-weight:600;margin:0 0 4px;text-wrap:balance}
+header p{margin:0;color:var(--muted);max-width:72ch}
+.meta{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em;margin-top:8px}
+.note{background:var(--warn-bg);color:var(--fg);border-left:3px solid var(--warn);padding:10px 14px;font-size:13px;max-width:90ch}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button{font:inherit;background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);
+  padding:8px 14px;cursor:pointer;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:600}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls{display:flex;gap:16px 24px;flex-wrap:wrap;align-items:flex-end}
+.controls label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+select{font:inherit;background:var(--surface);color:var(--fg);border:1px solid var(--line);padding:6px 8px;min-width:170px}
+.weights{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px 14px;
+  background:var(--surface);border:1px solid var(--line);padding:12px 14px}
+.weights label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.weights output{font-family:var(--mono);color:var(--fg)}
+.weights input{width:100%;accent-color:var(--accent)}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line)}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:900px}
+th,td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;font-weight:500;color:var(--muted);background:var(--surface);position:sticky;top:0}
+th button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+th button:hover{color:var(--fg)}
+th[aria-sort="ascending"] button::after{content:" ▲";font-size:9px}
+th[aria-sort="descending"] button::after{content:" ▼";font-size:9px}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;min-width:150px}
+td.name{font-weight:500}
+td.name small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+td.s{font-family:var(--mono);font-variant-numeric:tabular-nums;width:84px;
+  background:color-mix(in srgb,var(--accent) calc(var(--s) * 17%),var(--surface))}
+td.s.hi{color:var(--on-accent);font-weight:500}
+td.s.zero{color:var(--muted)}
+td.tot{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+tr.cx td{background:var(--surface);border-bottom:2px solid var(--accent)}
+tr.cx td.name{color:var(--accent)}
+td.st{font-size:11px;font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--muted);
+  border:1px dashed var(--muted);background:transparent}
+td.st.tested{color:var(--ok);border:1px solid var(--accent);font-weight:500}
+tfoot td{font-size:11px;color:var(--muted);white-space:normal;vertical-align:top;text-align:center;padding:8px 6px}
+tfoot td:first-child{font-weight:500}
+.legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:26px;height:18px;font-style:normal;text-align:center;font-family:var(--mono);line-height:18px;
+  background:color-mix(in srgb,var(--accent) calc(var(--s) * 17%),var(--surface));border:1px solid var(--line)}
+.legend i.hi{color:var(--on-accent)}
+.tbl-text td,.tbl-text th{text-align:left;white-space:normal;vertical-align:top}
+.tbl-text{min-width:760px}
+.pill{display:inline-block;font-size:11px;font-family:var(--mono);padding:1px 7px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.t1{border-color:var(--warn);color:var(--warn)}
+.pill.t2{border-color:var(--accent);color:var(--accent)}
+.small{font-size:12px;color:var(--muted);max-width:90ch}
+.col:not([hidden]){display:flex;flex-direction:column;gap:14px}
+[hidden]{display:none!important}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.mapbox{position:relative;background:var(--surface);border:1px solid var(--line);min-width:0}
+#mapsvg{display:block;max-width:100%;touch-action:none}
+#mapsvg text{font-family:var(--font);fill:var(--fg)}
+#mapsvg .ax text,#mapsvg text.ax{fill:var(--muted);font-size:11px}
+#mapsvg .lab{font-size:11px;paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+#mapsvg .pt{cursor:pointer;transition:opacity .15s}
+#mapsvg .pt:hover circle,#mapsvg .pt:focus-visible circle{stroke:var(--fg);stroke-width:2.5px}
+#mapsvg .pt:focus-visible{outline:none}
+#mapsvg .cxm{cursor:grab}
+#mapsvg .cxm:active{cursor:grabbing}
+#mapsvg .cxm:focus-visible polygon{stroke-width:4px}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font-size:12px;padding:6px 9px;max-width:230px;z-index:3;line-height:1.4}
+.tip b{font-weight:600}
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.side h3{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.lg{display:flex;flex-wrap:wrap;gap:6px}
+.lgb{font:inherit;font-size:12px;display:flex;gap:6px;align-items:center;background:var(--surface);color:var(--fg);border:1px solid var(--line);padding:3px 9px 3px 7px;cursor:pointer}
+.lgb i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.lgb.on{border-color:var(--fg);font-weight:500}
+.near{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.near li{display:flex;justify-content:space-between;gap:8px;font-size:13px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.near span{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.card h4{margin:0;font-size:15px;font-weight:600}
+.card p{margin:0;font-size:13px}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:3px 8px;align-items:center;font-size:12px;color:var(--muted)}
+.bars b{display:block;height:6px;background:var(--accent)}
+.bars em{font-style:normal;font-family:var(--mono);color:var(--fg)}
+.chk{flex-direction:row!important;align-items:center;gap:6px!important;padding-bottom:7px}
+@media (max-width:860px){.mapgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:600px){header h1{font-size:20px}}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>CARIVIX AI Competitive Matrix</h1>
+  <p>How 15 competitors and benchmarks score across eight capabilities, with CARIVIX's own position shown as implemented or proposed instead of scored.</p>
+  <div class="meta">Source: Competitive Intelligence Report v1.0, 5 Oct 2026 · Internal / Confidential · Research Draft</div>
+</header>
+
+<div class="note">Scores are qualitative research assessments of how central and mature each capability is in publicly documented products, not benchmark results. CARIVIX is not scored because most of its architecture is proposed. Only the Knowledge/RAG module has been implemented and tested.</div>
+
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="map">Positioning map</button>
+  <button role="tab" aria-selected="false" data-tab="matrix">Capability matrix</button>
+  <button role="tab" aria-selected="false" data-tab="position">Positioning</button>
+  <button role="tab" aria-selected="false" data-tab="pricing">Pricing signals</button>
+</div>
+
+<section id="tab-map" class="col">
+  <div class="controls">
+    <label>Horizontal axis<select id="ax"></select></label>
+    <label>Vertical axis<select id="ay"></select></label>
+    <label>Quick view<select id="mv"></select></label>
+    <label class="chk"><input type="checkbox" id="lbl"> Show names</label>
+  </div>
+  <div class="mapgrid">
+    <div id="mapbox" class="mapbox"><svg id="mapsvg" role="group" aria-label="Positioning map of competitors"></svg><div id="tip" class="tip" hidden></div></div>
+    <aside id="side" class="side"></aside>
+  </div>
+  <p class="small">Positions use the report's qualitative 0–5 scores. Combined axes are simple averages of the capabilities named. Bubbles that share a position are fanned out slightly. Bubble size is the weighted score from the Capability matrix tab, so changing weights there resizes the bubbles. The diamond is a movable what-if marker for CARIVIX, not a score: drag it (or focus it and use the arrow keys) to see which competitors sit nearest.</p>
+</section>
+
+<section id="tab-matrix" class="col" hidden>
+  <div class="controls">
+    <label>Group<select id="grp"></select></label>
+    <label>Weighting preset<select id="preset">
+      <option value="equal">Equal weights</option>
+      <option value="core">CARIVIX focus (research, data, GIS, government, India)</option>
+      <option value="custom">Custom (use sliders)</option>
+    </select></label>
+    <div class="legend" aria-label="Score scale">
+      <span>Score</span>
+      <i style="--s:0" class="zero">0</i><i style="--s:1">1</i><i style="--s:2">2</i><i style="--s:3">3</i><i style="--s:4" class="hi">4</i><i style="--s:5" class="hi">5</i>
+      <span>none → core to the platform</span>
+    </div>
+  </div>
+  <div class="weights" id="weights" aria-label="Column weights"></div>
+  <div class="scroll"><table id="m"></table></div>
+  <p class="small">Weighted score is the weight-averaged mean of the eight capability scores for each competitor. It is a screening aid for comparing overlap with a chosen focus, not a ranking of overall product quality. Click a column header to sort.</p>
+</section>
+
+<section id="tab-position" hidden>
+  <div class="scroll"><table class="tbl-text" id="pos"></table></div>
+</section>
+
+<section id="tab-pricing" hidden>
+  <div class="scroll"><table class="tbl-text" id="price"></table></div>
+  <p class="small" style="margin-top:10px">Pricing is uneven across vendors, so treat these as indicative signals, not like-for-like comparisons. CARIVIX has no validated pricing model yet; the report proposes enterprise or government licence plus implementation, data/GIS services and optional usage-based AI charges as a hypothesis.</p>
+</section>
+</div>
+
+<script>
+var COLS=[["Enterprise AI","ent"],["Research","res"],["Agents","agt"],["RAG / Knowledge","rag"],["Data Intelligence","dat"],["GIS","gis"],["Government","gov"],["India Localization","ind"]];
+var CORE={ent:1,res:2,agt:1,rag:2,dat:2,gis:2,gov:2,ind:2};
+// order of scores: ent,res,agt,rag,dat,gis,gov,ind
+var D=[
+["OpenAI","Frontier AI",[5,5,5,4,4,1,3,2]],
+["Google","Frontier AI",[5,5,5,5,5,4,4,4]],
+["Anthropic","Frontier AI",[4,4,4,4,3,1,3,2]],
+["Microsoft","Enterprise AI",[5,3,5,5,5,2,5,4]],
+["Glean","Enterprise AI",[5,3,5,5,4,1,2,2]],
+["Salesforce","Enterprise AI",[5,2,5,4,4,1,3,3]],
+["Perplexity","Research AI",[4,5,4,4,3,1,2,2]],
+["Palantir","Decision intelligence",[5,3,5,5,5,4,5,3]],
+["Esri","GIS / spatial",[4,2,4,3,4,5,5,3]],
+["CARTO","GIS / spatial",[3,2,4,3,4,5,3,2]],
+["Mapbox","GIS / spatial",[3,2,4,2,3,5,3,2]],
+["Google Earth Engine","GIS / spatial",[3,4,2,2,5,5,4,3]],
+["Sarvam","India / sovereign AI",[4,4,4,4,3,1,5,5]],
+["Krutrim","India / sovereign AI",[3,3,4,3,3,1,4,5]],
+["TCS","Government IT",[5,3,4,3,5,3,5,5]]
+];
+var CX=["Proposed","Proposed","Proposed","Tested","Proposed","Proposed","Proposed","Proposed"];
+var sortKey="w",sortDir=-1,w={};
+COLS.forEach(function(c){w[c[1]]=1});
+var $=function(id){return document.getElementById(id)};
+function wavg(s){var t=0,n=0;COLS.forEach(function(c,i){t+=s[i]*w[c[1]];n+=w[c[1]]});return n?t/n:0}
+function cls(s){return "s"+(s>=4?" hi":"")+(s===0?" zero":"")}
+
+var groups=["All groups"].concat(D.map(function(d){return d[1]}).filter(function(g,i,a){return a.indexOf(g)===i}));
+$("grp").innerHTML=groups.map(function(g){return "<option>"+g+"</option>"}).join("");
+$("grp").onchange=render;
+
+function buildWeights(){
+  $("weights").innerHTML=COLS.map(function(c){
+    return '<label for="w-'+c[1]+'">'+c[0]+' <output id="o-'+c[1]+'">'+w[c[1]]+'</output>'+
+    '<input type="range" id="w-'+c[1]+'" min="0" max="3" step="1" value="'+w[c[1]]+'"></label>'}).join("");
+  COLS.forEach(function(c){$("w-"+c[1]).oninput=function(e){
+    w[c[1]]=+e.target.value;$("o-"+c[1]).textContent=e.target.value;$("preset").value="custom";render()}});
+}
+function syncWeights(){COLS.forEach(function(c){$("w-"+c[1]).value=w[c[1]];$("o-"+c[1]).textContent=w[c[1]]})}
+$("preset").onchange=function(e){
+  COLS.forEach(function(c){w[c[1]]=e.target.value==="core"?CORE[c[1]]:1});
+  if(e.target.value!=="custom"){syncWeights();render()}};
+
+function render(){
+  var g=$("grp").value;
+  var rows=D.filter(function(d){return g==="All groups"||d[1]===g}).map(function(d){return{n:d[0],g:d[1],s:d[2],w:wavg(d[2])}});
+  rows.sort(function(a,b){
+    var x,y;
+    if(sortKey==="n"){return sortDir*a.n.localeCompare(b.n)}
+    if(sortKey==="w"){x=a.w;y=b.w}else{x=a.s[+sortKey];y=b.s[+sortKey]}
+    return (x-y)*sortDir || a.n.localeCompare(b.n)});
+  var ar=function(k){return sortKey===String(k)?(sortDir<0?"descending":"ascending"):"none"};
+  var h='<thead><tr><th aria-sort="'+ar("n")+'"><button data-k="n">Competitor</button></th>'+
+    COLS.map(function(c,i){return '<th aria-sort="'+ar(i)+'"><button data-k="'+i+'">'+c[0]+'</button></th>'}).join("")+
+    '<th aria-sort="'+ar("w")+'"><button data-k="w">Weighted</button></th></tr></thead>';
+  var cx='<tr class="cx"><td class="name">CARIVIX AI<small>Status, not scored</small></td>'+
+    CX.map(function(s){return '<td class="st'+(s==="Tested"?" tested":"")+'">'+s+'</td>'}).join("")+'<td class="st">n/a</td></tr>';
+  var body=rows.map(function(r){
+    return '<tr><td class="name">'+r.n+'<small>'+r.g+'</small></td>'+
+      r.s.map(function(v){return '<td class="'+cls(v)+'" style="--s:'+v+'">'+v+'</td>'}).join("")+
+      '<td class="tot">'+r.w.toFixed(2)+'</td></tr>'}).join("");
+  var foot='<tfoot><tr><td>Highest score</td>'+COLS.map(function(c,i){
+    var mx=Math.max.apply(null,rows.map(function(r){return r.s[i]}));
+    var names=rows.filter(function(r){return r.s[i]===mx}).map(function(r){return r.n});
+    return '<td>'+mx+'<br>'+(names.length>3?names.length+' tied':names.join(", "))+'</td>'}).join("")+'<td></td></tr></tfoot>';
+  $("m").innerHTML=h+'<tbody>'+cx+body+'</tbody>'+foot;
+  if(window.renderMap)renderMap();
+  $("m").querySelectorAll("th button").forEach(function(b){b.onclick=function(){
+    var k=b.dataset.k;if(sortKey===k){sortDir*=-1}else{sortKey=k;sortDir=k==="n"?1:-1}render()}});
+}
+
+var POS=[
+["Esri / ArcGIS","Critical","Enterprise GIS with embedded AI assistants, 100+ pretrained models, moving to geospatial agents.","Adding AI to GIS is not a differentiator on its own. Cost and licensing are sales-led."],
+["Perplexity","Direct","Research and search, 50,000+ organisations on Enterprise, combines internal knowledge with web research.","Direct competitor for Research Intelligence. CARIVIX needs deeper domain research, structured evidence, local data and GIS."],
+["Palantir","Closest analogue","Foundry, AIP and Ontology: data, context, AI, actions and governance as decision intelligence.","Copy the principle, not the platform. Specialise for research, government, GIS, smart cities and Indian datasets."],
+["Sarvam","Very high","Indian-language sovereign AI. Maharashtra (about 2,500 officials, 22 languages), Odisha, Tamil Nadu, Aadhaar voice agent.","Shows Indian-language plus sovereign plus government workflow is already a live market."],
+["TCS","Very high","Government implementation: Odisha OSWAS 3.0 (₹122.6 crore), SovereignSecure Cloud, public-sector GenAI.","Strongest government delivery competitor. CARIVIX must address procurement and sovereign hosting."],
+["Krutrim","High","Indic models, speech, translation, India-native AI cloud.","Indian AI and infrastructure benchmark, less direct than Sarvam for government intelligence."],
+["Glean","Benchmark","275+ connectors, enterprise graph, permissions-aware retrieval, agent governance.","Benchmark for RAG and knowledge integration. Workplace focus, not geographic or public-sector."],
+["OpenAI","Benchmark","General-purpose models, ChatGPT Enterprise, Workspace Agents.","Model and agent benchmark. Use or build around models, do not compete at the foundation layer."],
+["Google","Benchmark","Gemini, Enterprise Agent Platform, cloud, search, Earth Engine.","Benchmark for multimodal AI, agents and cloud architecture."],
+["Anthropic","Benchmark","Claude, enterprise and developer platforms, safety focus.","Potential model provider and frontier benchmark, not the closest application competitor."],
+["Microsoft","Benchmark","Microsoft 365 Copilot, Copilot Studio, Azure AI, enterprise distribution.","Enterprise AI and workflow benchmark. Ecosystem dependency considerations."],
+["Salesforce","Adjacent","Agentforce embedded in CRM and business processes.","Adjacent competitor and benchmark for enterprise agent execution."],
+["CARTO","Benchmark","Cloud-native spatial analytics, agentic GIS, agent traceability.","Benchmark for spatial analytics plus AI agents."],
+["Mapbox","Benchmark","Location infrastructure for AI, agentic mapping engine (Sept 2026).","Benchmark for AI plus location reasoning. Infrastructure, not decision platform."],
+["Google Earth Engine","Benchmark","80+ petabytes of geospatial data, satellite embeddings.","Benchmark for environmental, disaster and Earth-observation intelligence."]
+];
+function tier(t){return /Critical|Direct|Closest|Very/.test(t)?"t1":(t==="High"?"t2":"")}
+$("pos").innerHTML='<thead><tr><th>Competitor</th><th>Relevance</th><th>What they offer</th><th>Implication for CARIVIX</th></tr></thead><tbody>'+
+ POS.map(function(p){return '<tr><td><strong>'+p[0]+'</strong></td><td><span class="pill '+tier(p[1])+'">'+p[1]+'</span></td><td>'+p[2]+'</td><td>'+p[3]+'</td></tr>'}).join("")+'</tbody>';
+
+var PR=[
+["OpenAI Enterprise","Custom, sales-led","Negotiated around seats, usage, security and support."],
+["Perplexity Enterprise Pro","$40 per seat per month, or $400 per year","Transparent research-oriented enterprise benchmark."],
+["Perplexity Enterprise Max","$325 per seat per month, or $3,250 per year","Premium research and enterprise benchmark."],
+["Salesforce Agentforce","$500 per 100,000 Flex Credits, or $2 per conversation; other per-user options","Consumption and outcome-oriented pricing."],
+["Sarvam API","Usage-based API pricing plus custom enterprise plans","India-native usage and sovereign deployment benchmark."],
+["Palantir","Sales-led, custom engagement","High-value, implementation-heavy decision intelligence."],
+["Glean","Enterprise pricing generally sales-led","Enterprise knowledge and agent deployment benchmark."],
+["Esri ArcGIS Enterprise","Sales-led, no simple public SaaS price","Cost and architecture considerations noted in the report."]
+];
+$("price").innerHTML='<thead><tr><th>Vendor</th><th>Public pricing signal</th><th>Commercial implication</th></tr></thead><tbody>'+
+ PR.map(function(p){return '<tr><td><strong>'+p[0]+'</strong></td><td>'+p[1]+'</td><td>'+p[2]+'</td></tr>'}).join("")+'</tbody>';
+
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){
+  document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b)});
+  ["map","matrix","position","pricing"].forEach(function(t){$("tab-"+t).hidden=(t!==b.dataset.tab)});
+  if(b.dataset.tab==="map")renderMap()}});
+
+
+/* ---------- Positioning map ---------- */
+var GL=D.map(function(d){return d[1]}).filter(function(g,i,a){return a.indexOf(g)===i});
+var AX=[
+ ["c_res","Research + knowledge (avg)",function(s){return (s[1]+s[3])/2}],
+ ["c_gov","Government + India fit (avg)",function(s){return (s[6]+s[7])/2}],
+ ["c_ent","Enterprise AI + agents (avg)",function(s){return (s[0]+s[2])/2}],
+ ["gis","GIS",function(s){return s[5]}],
+ ["dat","Data intelligence",function(s){return s[4]}],
+ ["res","Research",function(s){return s[1]}],
+ ["rag","RAG / knowledge",function(s){return s[3]}],
+ ["gov","Government",function(s){return s[6]}],
+ ["ind","India localization",function(s){return s[7]}],
+ ["ent","Enterprise AI",function(s){return s[0]}],
+ ["agt","Agents",function(s){return s[2]}]];
+var PRE=[["Research × GIS","c_res","gis"],["Government & India × GIS","c_gov","gis"],["Research × Government & India","c_res","c_gov"],["Enterprise & agents × Government & India","c_ent","c_gov"]];
+var M={x:"c_res",y:"gis",cx:4,cy:4,sel:null,grp:null,drag:false,refocus:null,geo:null};
+function axo(id){return AX.filter(function(a){return a[0]===id})[0]}
+function posFor(n){return POS.filter(function(p){return p[0]===n||p[0].indexOf(n)===0})[0]}
+function fmt(v){return (Math.round(v*10)/10).toFixed(1)}
+
+function initMap(){
+  $("ax").innerHTML=$("ay").innerHTML=AX.map(function(a){return '<option value="'+a[0]+'">'+a[1]+'</option>'}).join("");
+  $("ax").value=M.x;$("ay").value=M.y;
+  $("mv").innerHTML='<option value="">Custom</option>'+PRE.map(function(p,i){return '<option value="'+i+'">'+p[0]+'</option>'}).join("");
+  $("mv").value="0";
+  $("lbl").checked=$("mapbox").clientWidth>=560;
+  $("ax").onchange=function(){M.x=this.value;$("mv").value="";renderMap()};
+  $("ay").onchange=function(){M.y=this.value;$("mv").value="";renderMap()};
+  $("mv").onchange=function(){if(this.value===""){return}var p=PRE[+this.value];M.x=p[1];M.y=p[2];$("ax").value=M.x;$("ay").value=M.y;renderMap()};
+  $("lbl").onchange=renderMap;
+  var svg=$("mapsvg"),tip=$("tip");
+  function toData(e){var r=svg.getBoundingClientRect(),g=M.geo,k=g.W/r.width;
+    var px=(e.clientX-r.left)*k,py=(e.clientY-r.top)*k;
+    return [g.lo+(px-g.l)/g.iw*(g.hi-g.lo),g.lo+(1-(py-g.t)/g.ih)*(g.hi-g.lo)]}
+  function clamp(v){return Math.max(0.5,Math.min(5.5,v))}
+  svg.addEventListener("pointerdown",function(e){
+    if(e.target.closest("[data-cx]")){M.drag=true;svg.setPointerCapture(e.pointerId);tip.hidden=true;e.preventDefault()}});
+  svg.addEventListener("pointermove",function(e){
+    if(M.drag){var d=toData(e);M.cx=clamp(d[0]);M.cy=clamp(d[1]);renderMap();return}
+    var t=e.target.closest&&e.target.closest("[data-n]");
+    if(!t){tip.hidden=true;return}
+    var p=M.pts.filter(function(q){return q.n===t.getAttribute("data-n")})[0];
+    var br=$("mapbox").getBoundingClientRect();
+    tip.innerHTML='<b>'+p.n+'</b> · '+p.g+'<br>'+axo(M.x)[1]+': '+fmt(p.x)+'<br>'+axo(M.y)[1]+': '+fmt(p.y)+'<br>Weighted score: '+p.w.toFixed(2);
+    tip.hidden=false;
+    var x=e.clientX-br.left+14,y=e.clientY-br.top+14;
+    if(x+tip.offsetWidth>br.width-4)x=e.clientX-br.left-tip.offsetWidth-14;
+    tip.style.left=Math.max(4,x)+"px";tip.style.top=y+"px"});
+  svg.addEventListener("pointerleave",function(){tip.hidden=true});
+  svg.addEventListener("pointerup",function(e){if(M.drag){M.drag=false}});
+  svg.addEventListener("pointercancel",function(){M.drag=false});
+  svg.addEventListener("click",function(e){
+    var t=e.target.closest("[data-n]");
+    if(t){var n=t.getAttribute("data-n");M.sel=(M.sel===n?null:n);M.refocus='[data-n="'+n+'"]';renderMap()}});
+  svg.addEventListener("keydown",function(e){
+    var t=e.target.closest&&e.target.closest("[data-n],[data-cx]");if(!t)return;
+    if(t.hasAttribute("data-n")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();t.dispatchEvent(new MouseEvent("click",{bubbles:true}));return}
+    if(t.hasAttribute("data-cx")){
+      var st=e.shiftKey?0.5:0.1,m={ArrowLeft:[-st,0],ArrowRight:[st,0],ArrowUp:[0,st],ArrowDown:[0,-st]}[e.key];
+      if(m){e.preventDefault();M.cx=clamp(M.cx+m[0]);M.cy=clamp(M.cy+m[1]);M.refocus="[data-cx]";renderMap()}}});
+  $("side").addEventListener("click",function(e){
+    var b=e.target.closest("[data-g]");if(!b)return;
+    var g=b.getAttribute("data-g");M.grp=(M.grp===g?null:g);renderMap()});
+  if(window.ResizeObserver){new ResizeObserver(function(){renderMap()}).observe($("mapbox"))}
+}
+
+function renderMap(){
+  var svg=$("mapsvg"),box=$("mapbox");if(!svg||!box)return;
+  var W=Math.floor(box.clientWidth);if(!W)return;
+  var H=Math.round(Math.max(360,Math.min(580,W*0.74)));
+  var m={l:50,r:16,t:16,b:44},iw=W-m.l-m.r,ih=H-m.t-m.b,lo=0.5,hi=5.5;
+  var X=function(v){return m.l+(v-lo)/(hi-lo)*iw},Y=function(v){return m.t+(1-(v-lo)/(hi-lo))*ih};
+  M.geo={W:W,l:m.l,t:m.t,iw:iw,ih:ih,lo:lo,hi:hi};
+  var fx=axo(M.x)[2],fy=axo(M.y)[2];
+  var pts=D.map(function(d){return{n:d[0],g:d[1],gi:GL.indexOf(d[1]),s:d[2],x:fx(d[2]),y:fy(d[2]),w:wavg(d[2])}});
+  pts.forEach(function(p){p.px=X(p.x);p.py=Y(p.y);p.r=6+p.w*2.4});
+  var bk={};pts.forEach(function(p){var k=Math.round(p.px/6)+","+Math.round(p.py/6);(bk[k]=bk[k]||[]).push(p)});
+  Object.keys(bk).forEach(function(k){var a=bk[k];if(a.length>1)a.forEach(function(p,i){
+    var ang=2*Math.PI*i/a.length-Math.PI/2,rad=6+a.length*3;p.px+=Math.cos(ang)*rad;p.py+=Math.sin(ang)*rad})});
+  pts.sort(function(a,b){return b.r-a.r});
+  M.pts=pts;
+  var o='';
+  for(var v=1;v<=5;v++){
+    o+='<line x1="'+X(v)+'" x2="'+X(v)+'" y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--line)" '+(v===3?'stroke-dasharray="4 4" stroke-width="1.5"':'')+'/>';
+    o+='<line y1="'+Y(v)+'" y2="'+Y(v)+'" x1="'+m.l+'" x2="'+(m.l+iw)+'" stroke="var(--line)" '+(v===3?'stroke-dasharray="4 4" stroke-width="1.5"':'')+'/>';
+    o+='<text class="ax" x="'+X(v)+'" y="'+(m.t+ih+16)+'" text-anchor="middle">'+v+'</text>';
+    o+='<text class="ax" x="'+(m.l-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>';
+  }
+  o+='<rect x="'+m.l+'" y="'+m.t+'" width="'+iw+'" height="'+ih+'" fill="none" stroke="var(--line)"/>';
+  o+='<text class="ax" x="'+(m.l+iw-8)+'" y="'+(m.t+16)+'" text-anchor="end" opacity=".8">Strong on both</text>';
+  o+='<text class="ax" x="'+(m.l+iw/2)+'" y="'+(H-8)+'" text-anchor="middle">'+axo(M.x)[1]+' →</text>';
+  o+='<text class="ax" transform="translate(14 '+(m.t+ih/2)+') rotate(-90)" text-anchor="middle">'+axo(M.y)[1]+' →</text>';
+  var dim=function(p){return M.grp&&M.grp!==p.g};
+  pts.forEach(function(p){
+    o+='<g class="pt" data-n="'+p.n+'" tabindex="0" role="button" aria-pressed="'+(M.sel===p.n)+'" aria-label="'+p.n+', '+p.g+', '+axo(M.x)[1]+' '+fmt(p.x)+', '+axo(M.y)[1]+' '+fmt(p.y)+'" opacity="'+(dim(p)?0.16:1)+'">'+
+      '<circle cx="'+p.px+'" cy="'+p.py+'" r="'+p.r+'" fill="var(--g'+(p.gi+1)+')" fill-opacity=".8" stroke="'+(M.sel===p.n?'var(--fg)':'var(--surface)')+'" stroke-width="'+(M.sel===p.n?3:1.5)+'"/></g>';
+  });
+  var cxp=X(M.cx),cyp=Y(M.cy);
+  var placed=[[cxp-60,cyp-30,cxp+60,cyp+14]];
+  if($("lbl").checked){
+    pts.forEach(function(p){
+      var tw=p.n.length*6.3,c=[[p.px+p.r+4,p.py+4,"start"],[p.px-p.r-4,p.py+4,"end"],[p.px-tw/2,p.py-p.r-5,"start"],[p.px-tw/2,p.py+p.r+13,"start"]];
+      for(var i=0;i<c.length;i++){
+        var x0=c[i][2]==="end"?c[i][0]-tw:c[i][0],b=[x0,c[i][1]-10,x0+tw,c[i][1]+3];
+        if(b[0]<m.l+2||b[2]>W-4||b[1]<m.t||b[3]>m.t+ih)continue;
+        if(placed.some(function(q){return b[0]<q[2]&&b[2]>q[0]&&b[1]<q[3]&&b[3]>q[1]}))continue;
+        placed.push(b);
+        o+='<text class="lab" x="'+c[i][0]+'" y="'+c[i][1]+'" text-anchor="'+c[i][2]+'" opacity="'+(dim(p)?0.2:1)+'" pointer-events="none">'+p.n+'</text>';break}
+    });
+  }
+  o+='<g class="cxm" data-cx="1" tabindex="0" role="slider" aria-label="CARIVIX what-if marker at '+fmt(M.cx)+', '+fmt(M.cy)+'. Arrow keys move it.">'+
+     '<circle cx="'+cxp+'" cy="'+cyp+'" r="20" fill="transparent"/>'+
+     '<polygon points="'+cxp+','+(cyp-12)+' '+(cxp+12)+','+cyp+' '+cxp+','+(cyp+12)+' '+(cxp-12)+','+cyp+'" fill="var(--accent)" fill-opacity=".25" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="4 2"/>'+
+     '<text class="lab" x="'+cxp+'" y="'+(cyp-18)+'" text-anchor="middle" style="fill:var(--accent);font-weight:600">CARIVIX (what-if)</text></g>';
+  svg.setAttribute("width",W);svg.setAttribute("height",H);svg.setAttribute("viewBox","0 0 "+W+" "+H);
+  svg.innerHTML=o;
+  renderSide();
+  if(M.refocus){var el=svg.querySelector(M.refocus);if(el)el.focus();M.refocus=null}
+}
+
+function renderSide(){
+  var fx=axo(M.x)[2],fy=axo(M.y)[2];
+  var h='<div><h3>Groups</h3><div class="lg">'+GL.map(function(g,i){
+    return '<button class="lgb'+(M.grp===g?' on':'')+'" data-g="'+g+'" aria-pressed="'+(M.grp===g)+'"><i style="background:var(--g'+(i+1)+')"></i>'+g+'</button>'}).join("")+'</div></div>';
+  var near=D.map(function(d){return{n:d[0],d:Math.sqrt(Math.pow(fx(d[2])-M.cx,2)+Math.pow(fy(d[2])-M.cy,2))}}).sort(function(a,b){return a.d-b.d}).slice(0,3);
+  h+='<div><h3>Nearest to the marker</h3><ol class="near">'+near.map(function(n){return '<li>'+n.n+'<span>'+n.d.toFixed(1)+' away</span></li>'}).join("")+'</ol>'+
+     '<p class="small" style="margin-top:6px">Marker at '+fmt(M.cx)+' × '+fmt(M.cy)+' on the current axes. A smaller distance means a more crowded position.</p></div>';
+  if(M.sel){
+    var d=D.filter(function(x){return x[0]===M.sel})[0],p=posFor(M.sel);
+    h+='<div class="card"><h4>'+d[0]+'</h4><div><span class="pill '+(p?tier(p[1]):'')+'">'+(p?p[1]:'')+'</span> <span class="pill">'+d[1]+'</span></div>'+
+      (p?'<p>'+p[2]+'</p><p><strong>For CARIVIX:</strong> '+p[3]+'</p>':'')+
+      '<div class="bars">'+COLS.map(function(c,i){return '<span>'+c[0]+'</span><b style="width:'+(d[2][i]*20)+'%"></b><em>'+d[2][i]+'</em>'}).join("")+'</div></div>';
+  }else{
+    h+='<p class="small">Select a bubble to see what the competitor offers, why it matters to CARIVIX and its eight scores.</p>';
+  }
+  $("side").innerHTML=h;
+}
+
+buildWeights();initMap();render();
+</script>
+
+</body></html>
